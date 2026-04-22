@@ -23,9 +23,12 @@ while True:
         # A cada iteração, é escolhido um item aleatorio da lista de números ou de letras e ele é adicionado na string de acordo com a estrtura do Mercosul
         placaString =  random.choice(alfabeto) + random.choice(alfabeto) + random.choice(alfabeto) + str(random.choice(numeros)) + random.choice(alfabeto) + str(random.choice(numeros)) + str(random.choice(numeros))
         print(placaString)
+        if placaString not in placasGeradas: #Verifica se já existe uma placa idêntica
         # A string gerada é guardada dentro da lista de placas
-        placasGeradas.append(placaString)        
-        continue; 
+            placasGeradas.append(placaString)        
+            continue
+        else:
+            print('Placa já existe. Uma nova vai ser gerada')
     else:
         print('Opção inválida! Tente novamente')
         continue
