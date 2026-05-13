@@ -1,7 +1,21 @@
-# Gerando uma lista com todas as letras do alfabeto
 import string
 import random
+import mysql.connector
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+conexao = mysql.connector.connect(
+    host=os.getenv('DB_HOST'),
+    user=os.getenv('DB_USER'),
+    password= os.getenv('DB_PASSWORD'),
+    database= os.getenv('DB_NAME')
+)
+
+cursor = conexao.cursor()
+
+# Gerando uma lista com todas as letras do alfabeto
 alfabeto = list(string.ascii_uppercase)
 
  #Gerando uma lista com número de 1 a 9
@@ -25,7 +39,18 @@ while True:
         print(placaString)
         if placaString not in placasGeradas: #Verifica se já existe uma placa idêntica
         # A string gerada é guardada dentro da lista de placas
-            placasGeradas.append(placaString)        
+            placasGeradas.append(placaString)  
+            
+            sql = "INSERT INTO placas_carros (placa) VALUES (%s)"
+            valores = (placaString,)
+
+            try:
+                cursor.execute(sql,valores)
+                conexao.commit()
+                print("Placa salva!")
+            except Exception as erro :
+                print(erro)
+
             continue
         else:
             print('Placa já existe. Uma nova vai ser gerada')
@@ -33,10 +58,5 @@ while True:
         print('Opção inválida! Tente novamente')
         continue
 
-print('Placas geradas:')      
-for placa in placasGeradas:
-    print('• ' + placa)
-
-
-
-
+cursor.close()
+conexao.close()
